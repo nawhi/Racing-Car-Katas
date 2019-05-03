@@ -7,8 +7,9 @@ import static org.junit.Assert.*;
 public class TestAlarm {
 
     @Test
-    public void foo() {
-        Alarm alarm = new Alarm();
-        assertEquals(false, alarm.isAlarmOn());
+    public void alarm_is_off_by_default() {
+        Alarm alarm = new Alarm(new Sensor());
+        assertFalse(alarm.isAlarmOn());
     }
+
 }
