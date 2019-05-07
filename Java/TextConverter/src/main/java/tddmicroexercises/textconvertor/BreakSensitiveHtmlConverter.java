@@ -9,8 +9,8 @@ public class BreakSensitiveHtmlConverter {
 
     public String invoke(int page, List<Integer> breaks, String filename) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(filename));
-        Integer charsToNextPage = breaks.get(page);
-        reader.skip(charsToNextPage);
+        Integer offsetToThisPage = breaks.get(page);
+        reader.skip(offsetToThisPage);
         StringBuffer htmlPage = new StringBuffer();
         String line = reader.readLine();
         while (line != null)
