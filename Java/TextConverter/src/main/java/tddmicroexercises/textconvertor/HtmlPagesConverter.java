@@ -30,22 +30,8 @@ public class HtmlPagesConverter {
     }
 
     public String getHtmlPage(int page) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(this.filename));
-        reader.skip(breaks.get(page));
-        StringBuffer htmlPage = new StringBuffer();
-        String line = reader.readLine();
-        while (line != null)
-        {
-            if (line.contains("PAGE_BREAK")) {
-                break;
-            }
-            htmlPage.append(StringEscapeUtils.escapeHtml(line));
-            htmlPage.append("<br />");
-            
-            line = reader.readLine();
-        }
-        reader.close();
-        return htmlPage.toString();
+        final BreakSensitiveHtmlConverter foo = new BreakSensitiveHtmlConverter();
+        return foo.invoke(page, breaks, filename);
     }
 
     public String getFilename() {
