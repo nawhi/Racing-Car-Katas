@@ -22,8 +22,7 @@ public class HtmlPagesConverter {
         {
             cumulativeCharCount += line.length() + 1; // add one for the newline
             if (line.contains("PAGE_BREAK")) {
-                int page_break_position = cumulativeCharCount;
-                breaks.add(page_break_position);
+                breaks.add(cumulativeCharCount);
             }
             line = reader.readLine();
         }
