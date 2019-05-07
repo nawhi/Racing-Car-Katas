@@ -1,0 +1,5 @@
+A line <>
+PAGE_BREAK
+Another line ?
+Embedded PAGE_BREAK "mid-line"
+final''line

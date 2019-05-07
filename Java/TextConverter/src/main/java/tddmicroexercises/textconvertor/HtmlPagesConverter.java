@@ -52,5 +52,5 @@ public class HtmlPagesConverter {
     public String getFilename() {
         return this.filename;
     }
-    
+
 }
