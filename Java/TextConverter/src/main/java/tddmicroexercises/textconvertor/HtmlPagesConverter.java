@@ -9,7 +9,8 @@ import java.util.List;
 
 public class HtmlPagesConverter {
 
-    private final List<String> lines = new ArrayList<>();
+    private final List<String> allLines = new ArrayList<>();
+    private final List<String> linesWithoutPageBreaks = new ArrayList<>();
     private String filename;
     private List<Integer> breaks = new ArrayList<Integer>();
 
@@ -20,13 +21,18 @@ public class HtmlPagesConverter {
         BufferedReader reader = new BufferedReader(new FileReader(this.filename));
         int cumulativeCharCount = 0;
         String line = reader.readLine();
+        StringBuilder pageBuilder = new StringBuilder();
         while (line != null)
         {
-            lines.add(line);
+            allLines.add(line);
             cumulativeCharCount += line.length() + 1; // add one for the newline
             if (line.contains("PAGE_BREAK")) {
                 int page_break_position = cumulativeCharCount;
                 breaks.add(page_break_position);
+                linesWithoutPageBreaks.add(pageBuilder.toString());
+                pageBuilder.setLength(0);
+            } else {
+                pageBuilder.append(line);
             }
             line = reader.readLine();
         }
@@ -35,7 +41,7 @@ public class HtmlPagesConverter {
     }
 
     public String getHtmlPage(int page) throws IOException {
-        BufferedReader reader = new BufferedReader(new StringReader(String.join("\n", lines)));
+        BufferedReader reader = new BufferedReader(new StringReader(String.join("\n", allLines)));
         reader.skip(breaks.get(page));
         StringBuffer htmlPage = new StringBuffer();
         String line = reader.readLine();

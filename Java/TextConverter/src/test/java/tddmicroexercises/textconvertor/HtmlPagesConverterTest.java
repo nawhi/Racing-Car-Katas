@@ -29,7 +29,7 @@ public class HtmlPagesConverterTest {
     }
 
     @Test(expected = FileNotFoundException.class)
-    public void file_does_not_exist() throws IOException {
+    public void throws_when_file_does_not_exist() throws IOException {
         new HtmlPagesConverter(new File("does not exist").getAbsolutePath());
     }
 
@@ -140,18 +140,6 @@ public class HtmlPagesConverterTest {
         assertEquals("A line<br />", converter.getHtmlPage(0));
         assertEquals("Another line<br />", converter.getHtmlPage(1));
     }
-
-//    @Test
-//    public void retains_number_of_breaks_from_original_file() throws IOException {
-//        String tempFilename = tempFile("line1\nPAGE_BREAK\nline2\nPAGE_BREAK\nline3");
-//        HtmlPagesConverter converter = new HtmlPagesConverter(tempFilename);
-//
-//        overwriteFile(tempFilename, "foo");
-//
-//        assertEquals("foo<br />", converter.getHtmlPage(0));
-//        assertEquals("", converter.getHtmlPage(1));
-//        assertEquals("", converter.getHtmlPage(2));
-//    }
 
     private void overwriteFile(String tempFilename, String newContent) throws FileNotFoundException {
         try (PrintWriter writer = new PrintWriter(tempFilename)) {
