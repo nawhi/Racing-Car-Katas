@@ -3,6 +3,7 @@ package tddmicroexercises.telemetrysystem;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 public class TelemetryDiagnosticControlsTest
 {
@@ -35,4 +36,37 @@ public class TelemetryDiagnosticControlsTest
                 "Remote Rtrn Count........... 00", controls.getDiagnosticInfo());
     }
 
+    @Test
+    public void disconnects_from_client_when_checking_transmission() throws Exception {
+        TelemetryClient client = mock(TelemetryClient.class);
+        when(client.getOnlineStatus()).thenReturn(true);
+
+        TelemetryDiagnosticControls controls = new TelemetryDiagnosticControls(client);
+
+        controls.checkTransmission();
+
+        verify(client).disconnect();
+    }
+
+    @Test(expected=Exception.class)
+    public void throws_if_client_is_not_online() throws Exception {
+        TelemetryClient client = mockClientWithOnlineStatus(false);
+        new TelemetryDiagnosticControls(client).checkTransmission();
+    }
+
+    private TelemetryClient mockClientWithOnlineStatus(boolean b) {
+        TelemetryClient client = mock(TelemetryClient.class);
+        when(client.getOnlineStatus()).thenReturn(b);
+        return client;
+    }
+
+//    @Test(expected=Exception.class)
+//    public void tries_three_times_to_reconnect() throws Exception {
+//        TelemetryClient client = mock(TelemetryClient.class);
+//        when(client.getOnlineStatus()).thenReturn(false);
+//
+//        TelemetryDiagnosticControls controls = new TelemetryDiagnosticControls(client);
+//
+//        verify(client, times(3)).connect("*111#");
+//    }
 }
