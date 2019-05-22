@@ -60,13 +60,17 @@ public class TelemetryDiagnosticControlsTest
         return client;
     }
 
-//    @Test(expected=Exception.class)
-//    public void tries_three_times_to_reconnect() throws Exception {
-//        TelemetryClient client = mock(TelemetryClient.class);
-//        when(client.getOnlineStatus()).thenReturn(false);
-//
-//        TelemetryDiagnosticControls controls = new TelemetryDiagnosticControls(client);
-//
-//        verify(client, times(3)).connect("*111#");
-//    }
+    @Test
+    public void tries_three_times_to_reconnect() {
+        TelemetryClient client = mock(TelemetryClient.class);
+        when(client.getOnlineStatus()).thenReturn(false);
+
+        TelemetryDiagnosticControls controls = new TelemetryDiagnosticControls(client);
+
+        try {
+            controls.checkTransmission();
+        } catch (Exception ignored) {}
+
+        verify(client, times(3)).connect("*111#");
+    }
 }
