@@ -38,8 +38,7 @@ public class TelemetryDiagnosticControlsTest
 
     @Test
     public void disconnects_from_client_when_checking_transmission() throws Exception {
-        TelemetryClient client = mock(TelemetryClient.class);
-        when(client.getOnlineStatus()).thenReturn(true);
+        TelemetryClient client = mockClientWithOnlineStatus(true);
 
         TelemetryDiagnosticControls controls = new TelemetryDiagnosticControls(client);
 
@@ -54,14 +53,8 @@ public class TelemetryDiagnosticControlsTest
         new TelemetryDiagnosticControls(client).checkTransmission();
     }
 
-    private TelemetryClient mockClientWithOnlineStatus(boolean b) {
-        TelemetryClient client = mock(TelemetryClient.class);
-        when(client.getOnlineStatus()).thenReturn(b);
-        return client;
-    }
-
     @Test
-    public void tries_three_times_to_reconnect() {
+    public void tries_three_times_to_reconnect_if_client_is_not_online() {
         TelemetryClient client = mock(TelemetryClient.class);
         when(client.getOnlineStatus()).thenReturn(false);
 
@@ -72,5 +65,34 @@ public class TelemetryDiagnosticControlsTest
         } catch (Exception ignored) {}
 
         verify(client, times(3)).connect("*111#");
+    }
+
+    @Test
+    public void sends_diagnostic_message_to_telemetry_client() throws Exception {
+        TelemetryClient client = mockClientWithOnlineStatus(true);
+
+        new TelemetryDiagnosticControls(client).checkTransmission();
+
+        verify(client).send(TelemetryClient.DIAGNOSTIC_MESSAGE);
+    }
+
+    @Test
+    public void stores_diagnostic_info_retrieved_from_client() throws Exception {
+        TelemetryClient client = mockClientWithOnlineStatus(true);
+        String diagnosticInfo = "some diagnostic info";
+        when(client.receive()).thenReturn(diagnosticInfo);
+
+        TelemetryDiagnosticControls controls = new TelemetryDiagnosticControls(client);
+        controls.checkTransmission();
+
+        assertEquals(diagnosticInfo, controls.getDiagnosticInfo());
+
+
+    }
+
+    private TelemetryClient mockClientWithOnlineStatus(boolean b) {
+        TelemetryClient client = mock(TelemetryClient.class);
+        when(client.getOnlineStatus()).thenReturn(b);
+        return client;
     }
 }
