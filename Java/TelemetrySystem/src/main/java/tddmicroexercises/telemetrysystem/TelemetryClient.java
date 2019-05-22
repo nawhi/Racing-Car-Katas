@@ -11,7 +11,7 @@ public class TelemetryClient
 
     private final Random connectionEventsSimulator = new Random(42);
 
-    public boolean getOnlineStatus()
+    public boolean isOnline()
     {
         return onlineStatus; 
     }

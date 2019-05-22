@@ -29,15 +29,12 @@ public class TelemetryDiagnosticControls
             diagnosticInfo = "";
 
             telemetryClient.disconnect();
-    
-            int retryLeft = 3;
-            while (telemetryClient.getOnlineStatus() == false && retryLeft > 0)
-            {
+
+            for (int retries = 3; !telemetryClient.isOnline() && retries > 0; retries--) {
                 telemetryClient.connect(DiagnosticChannelConnectionString);
-                retryLeft -= 1;
             }
              
-            if(telemetryClient.getOnlineStatus() == false)
+            if(!telemetryClient.isOnline())
             {
                 throw new Exception("Unable to connect.");
             }

@@ -56,7 +56,7 @@ public class TelemetryDiagnosticControlsTest
     @Test
     public void tries_three_times_to_reconnect_if_client_is_not_online() {
         TelemetryClient client = mock(TelemetryClient.class);
-        when(client.getOnlineStatus()).thenReturn(false);
+        when(client.isOnline()).thenReturn(false);
 
         TelemetryDiagnosticControls controls = new TelemetryDiagnosticControls(client);
 
@@ -92,7 +92,7 @@ public class TelemetryDiagnosticControlsTest
 
     private TelemetryClient mockClientWithOnlineStatus(boolean b) {
         TelemetryClient client = mock(TelemetryClient.class);
-        when(client.getOnlineStatus()).thenReturn(b);
+        when(client.isOnline()).thenReturn(b);
         return client;
     }
 }
